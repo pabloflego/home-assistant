@@ -1,0 +1,138 @@
+blueprint:
+  name: Zigbee2MQTT - Tuya 4-Button Scene Switch TS004F
+  description: Automate your Tuya 4-Button Scene Switch (TS004F) via Zigbee2MQTT. Link - https://www.zigbee2mqtt.io/devices/TS004F.html
+  domain: automation
+  input:
+    switch:
+      name: TS004F Switch
+      description: Tuya 4-Button Wireless Switch
+      selector:
+        entity:
+          domain: sensor
+          integration: mqtt
+    button_one_short_press:
+      name: Button 1 - Single Press
+      description: Action to run on button 1 (bottom-left) single press
+      default: []
+      selector:
+        action: null
+    button_one_hold:
+      name: Button 1 - Hold
+      description: Action to run on button 1 (bottom-left) single press
+      default: []
+      selector:
+        action: null
+    button_one_double_press:
+      name: Button 1 - Double Press
+      description: Action to run on button 1 (bottom-left) single press
+      default: []
+      selector:
+        action: null
+    button_two_short_press:
+      name: Button 2 - Single Press
+      description: Action to run on button 2 (lower-right) single press
+      default: []
+      selector:
+        action: null
+    button_two_hold:
+      name: Button 2 - Hold
+      description: Action to run on button 2 (lower-right) single press
+      default: []
+      selector:
+        action: null
+    button_two_double_press:
+      name: Button 2 - Double Press
+      description: Action to run on button 2 (lower-right) single press
+      default: []
+      selector:
+        action: null
+    button_three_short_press:
+      name: Button 3 - Single Press
+      description: Action to run on button 3 (top-right) single press
+      default: []
+      selector:
+        action: null
+    button_three_hold:
+      name: Button 3 - Hold
+      description: Action to run on button 3 (top-right) single press
+      default: []
+      selector:
+        action: null
+    button_three_double_press:
+      name: Button 3 - Double Press
+      description: Action to run on button 3 (top-right) single press
+      default: []
+      selector:
+        action: null
+    button_four_short_press:
+      name: Button 4 - Single Press
+      description: Action to run on button 4 (top-left) single press
+      default: []
+      selector:
+        action: null
+    button_four_hold:
+      name: Button 4 - Long Press
+      description: Action to run on button 4 (lower-left) long press
+      default: []
+      selector:
+        action: null
+    button_four_double_press:
+      name: Button 4 - Double Press
+      description: Action to run on button 4 (lower-left) long press
+      default: []
+      selector:
+        action: null
+  source_url: https://raw.githubusercontent.com/pabloflego/home-assistant/refs/heads/main/blueprints/button/z2m_tuya_st004f_4gang.yaml
+mode: single
+max_exceeded: silent
+variables:
+  command: "{{ trigger.payload }}"
+  topic: "{{ trigger.topic }}"
+  switch_name: !input "switch"
+  deviceName: "{{ state_attr(switch_name, 'friendly_name') }}"
+trigger:
+  - platform: mqtt
+    topic: zigbee2mqtt/+/action
+action:
+  - choose:
+      - conditions:
+          - "{{ topic.split('/')[1].replace('/', '') == deviceName.split(' ')[0]
+            }}"
+        sequence:
+          - choose:
+              - conditions:
+                  - "{{ command == '1_single' }}"
+                sequence: !input "button_one_short_press"
+              - conditions:
+                  - "{{ command == '2_single' }}"
+                sequence: !input "button_two_short_press"
+              - conditions:
+                  - "{{ command == '3_single' }}"
+                sequence: !input "button_three_short_press"
+              - conditions:
+                  - "{{ command == '4_single' }}"
+                sequence: !input "button_four_short_press"
+              - conditions:
+                  - "{{ command == '1_double' }}"
+                sequence: !input "button_one_double_press"
+              - conditions:
+                  - "{{ command == '2_double' }}"
+                sequence: !input "button_two_double_press"
+              - conditions:
+                  - "{{ command == '3_double' }}"
+                sequence: !input "button_three_double_press"
+              - conditions:
+                  - "{{ command == '4_double' }}"
+                sequence: !input "button_four_double_press"
+              - conditions:
+                  - "{{ command == '1_hold' }}"
+                sequence: !input "button_one_hold"
+              - conditions:
+                  - "{{ command == '2_hold' }}"
+                sequence: !input "button_two_hold"
+              - conditions:
+                  - "{{ command == '3_hold' }}"
+                sequence: !input "button_three_hold"
+              - conditions:
+                  - "{{ command == '4_hold' }}"
+                sequence: !input "button_four_hold"
