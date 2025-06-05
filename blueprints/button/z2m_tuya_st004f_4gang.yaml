@@ -1,5 +1,7 @@
+# Version: 1.0
+# Date: 2025-06-05
 blueprint:
-  name: Zigbee2MQTT - Tuya 4-Button Scene Switch TS004F
+  name: Zigbee2MQTT - Tuya 4-Button Scene Switch TS004F v1.0
   description: Automate your Tuya 4-Button Scene Switch (TS004F) via Zigbee2MQTT. Link - https://www.zigbee2mqtt.io/devices/TS004F.html
   domain: automation
   input:

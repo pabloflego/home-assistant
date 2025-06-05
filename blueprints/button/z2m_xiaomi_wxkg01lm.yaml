@@ -1,7 +1,7 @@
-# Version: 0.1
+# Version: 1.0
 # Date: 2025-06-05
 blueprint:
-  name: Z2M - Xiaomi WXKG01LM Wireless Button
+  name: Z2M - Xiaomi WXKG01LM Wireless Button v1.0
   description: |
     Automation blueprint for Xiaomi WXKG01LM wireless switches connected through Zigbee2MQTT.
     Handles all button actions:
