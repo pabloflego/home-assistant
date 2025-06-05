@@ -1,0 +1,136 @@
+blueprint:
+  name: ZB-SW03 3 Button Switch with State-Aware Actions
+  description: |
+    Responds to single presses on a 3-button Zigbee wall switch (like eWeLink ZB-SW03),
+    using light entity state as trigger. Each button can trigger a different action depending on
+    whether its LED entity is on, off, or in an unknown state.
+  domain: automation
+  input:
+    button_1_entity:
+      name: Button 1 Entity
+      selector:
+        entity:
+          domain: light
+    button_1_on:
+      name: Button 1 - Action if ON
+      default: []
+      selector:
+        action: {}
+    button_1_off:
+      name: Button 1 - Action if OFF
+      default: []
+      selector:
+        action: {}
+    button_1_fallback:
+      name: Button 1 - Fallback Action
+      default: []
+      selector:
+        action: {}
+
+    button_2_entity:
+      name: Button 2 Entity
+      selector:
+        entity:
+          domain: light
+    button_2_on:
+      name: Button 2 - Action if ON
+      default: []
+      selector:
+        action: {}
+    button_2_off:
+      name: Button 2 - Action if OFF
+      default: []
+      selector:
+        action: {}
+    button_2_fallback:
+      name: Button 2 - Fallback Action
+      default: []
+      selector:
+        action: {}
+
+    button_3_entity:
+      name: Button 3 Entity
+      selector:
+        entity:
+          domain: light
+    button_3_on:
+      name: Button 3 - Action if ON
+      default: []
+      selector:
+        action: {}
+    button_3_off:
+      name: Button 3 - Action if OFF
+      default: []
+      selector:
+        action: {}
+    button_3_fallback:
+      name: Button 3 - Fallback Action
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: state
+    entity_id: !input button_1_entity
+    id: button_1
+  - platform: state
+    entity_id: !input button_2_entity
+    id: button_2
+  - platform: state
+    entity_id: !input button_3_entity
+    id: button_3
+
+condition: []
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: button_1
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_1_entity
+                    state: "on"
+                sequence: !input button_1_on
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_1_entity
+                    state: "off"
+                sequence: !input button_1_off
+            default: !input button_1_fallback
+
+      - conditions:
+          - condition: trigger
+            id: button_2
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_2_entity
+                    state: "on"
+                sequence: !input button_2_on
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_2_entity
+                    state: "off"
+                sequence: !input button_2_off
+            default: !input button_2_fallback
+
+      - conditions:
+          - condition: trigger
+            id: button_3
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_3_entity
+                    state: "on"
+                sequence: !input button_3_on
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_3_entity
+                    state: "off"
+                sequence: !input button_3_off
+            default: !input button_3_fallback
