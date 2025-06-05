@@ -1,6 +1,7 @@
 # Version: 1.1
 # Date: 2025-06-05
 blueprint:
+  source_url: https://raw.githubusercontent.com/pabloflego/home-assistant/refs/heads/main/blueprints/button/z2m_tuya_st004f_4gang.yaml
   name: Z2M - Tuya 4-Button Scene Switch TS004F v1.1
   description: >-
     Automate your Tuya 4-Button Scene Switch (TS004F) via Zigbee2MQTT.
