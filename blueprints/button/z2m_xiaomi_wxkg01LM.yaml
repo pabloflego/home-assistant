@@ -1,0 +1,113 @@
+# Version: 0.1
+# Date: 2025-06-05
+blueprint:
+  name: Z2M - Xiaomi WXKG01LM Wireless Button
+  description: |
+    Automation blueprint for Xiaomi WXKG01LM wireless switches connected through Zigbee2MQTT.
+    Handles all button actions:
+    - Single click
+    - Double click
+    - Triple click
+    - Quadruple click
+    - Long press/hold
+    - Long press release
+
+    Select your Xiaomi WXKG01LM device from the dropdown and configure the actions you want to trigger for each button press type.
+  domain: automation
+  input:
+    button_device:
+      name: Remote
+      description: Select your Xiaomi WXKG01LM device
+      selector:
+        device:
+          integration: mqtt
+          manufacturer: Xiaomi
+          model: "Mi wireless switch"
+    single_click:
+      name: Single click
+      default: []
+      selector:
+        action: {}
+    double_click:
+      name: Double click
+      default: []
+      selector:
+        action: {}
+    triple_click:
+      name: Triple click
+      default: []
+      selector:
+        action: {}
+    quadruple_click:
+      name: Quadruple click
+      default: []
+      selector:
+        action: {}
+    long_press:
+      name: Long press/hold
+      default: []
+      selector:
+        action: {}
+    long_release:
+      name: Long press release
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: device
+    domain: mqtt
+    device_id: !input button_device
+    type: action
+    id: "single"
+    subtype: single
+  - platform: device
+    domain: mqtt
+    device_id: !input button_device
+    type: action
+    id: "double"
+    subtype: double
+  - platform: device
+    domain: mqtt
+    device_id: !input button_device
+    type: action
+    id: "triple"
+    subtype: triple
+  - platform: device
+    domain: mqtt
+    device_id: !input button_device
+    type: action
+    id: "quadruple"
+    subtype: quadruple
+  - platform: device
+    domain: mqtt
+    device_id: !input button_device
+    type: action
+    id: "hold"
+    subtype: hold
+  - platform: device
+    domain: mqtt
+    device_id: !input button_device
+    type: action
+    id: "release"
+    subtype: release
+
+variables:
+  action: "{{ trigger.id }}"
+
+action:
+  - choose:
+      - conditions: "{{ action == 'single' }}"
+        sequence: !input single_click
+      - conditions: "{{ action == 'double' }}"
+        sequence: !input double_click
+      - conditions: "{{ action == 'triple' }}"
+        sequence: !input triple_click
+      - conditions: "{{ action == 'quadruple' }}"
+        sequence: !input quadruple_click
+      - conditions: "{{ action == 'hold' }}"
+        sequence: !input long_press
+      - conditions: "{{ action == 'release' }}"
+        sequence: !input long_release
+
+mode: queued
