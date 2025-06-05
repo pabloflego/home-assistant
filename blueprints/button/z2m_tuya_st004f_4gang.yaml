@@ -17,7 +17,7 @@ blueprint:
         device:
           integration: mqtt
           manufacturer: Tuya
-          model: TS004F
+          model: "Wireless switch with 4 buttons"
     button_1_single:
       name: Button 1 Single Press
       description: Action to run on single press of button 1
