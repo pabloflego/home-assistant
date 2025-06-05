@@ -1,0 +1,65 @@
+# Version: 2.0
+# Date: 2025-06-05
+blueprint:
+  name: Z2M - SONOFF SNZB-01 Wireless Switch
+  description: |
+    Handle single, double, and long presses from a SONOFF SNZB-01 wireless switch through Zigbee2MQTT.
+    This blueprint is specifically designed for the SONOFF SNZB-01 button which supports single press, double press, and long press actions.
+  domain: automation
+  input:
+    button_device:
+      name: Button
+      description: Select your SONOFF SNZB-01 device
+      selector:
+        device:
+          integration: zigbee2mqtt
+          manufacturer: SONOFF
+          model: SNZB-01
+    single_press:
+      name: Single press
+      default: []
+      selector:
+        action: {}
+    double_press:
+      name: Double press
+      default: []
+      selector:
+        action: {}
+    long_press:
+      name: Long press
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: device
+    domain: zigbee2mqtt
+    device_id: !input button_device
+    type: action
+    subtype: single
+    id: "single"
+  - platform: device
+    domain: zigbee2mqtt
+    device_id: !input button_device
+    type: action
+    subtype: double
+    id: "double"
+  - platform: device
+    domain: zigbee2mqtt
+    device_id: !input button_device
+    type: action
+    subtype: long
+    id: "long"
+
+variables:
+  action: "{{ trigger.id }}"
+
+action:
+  - choose:
+      - conditions: "{{ action == 'single' }}"
+        sequence: !input single_press
+      - conditions: "{{ action == 'double' }}"
+        sequence: !input double_press
+      - conditions: "{{ action in ['long', 'release'] }}"
+        sequence: !input long_press
+mode: queued
