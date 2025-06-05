@@ -1,87 +1,91 @@
-# Version: 1.6
+# Version: 1.8
 # Date: 2025-06-05
 blueprint:
-  name: Z2M - eWeLink ZB-SW03 3 Gang Switch v1.6
+  name: Z2M - eWeLink ZB-SW03 3 Gang Switch v1.8
   description: |
     Automation blueprint for eWeLink ZB-SW03 3-gang Zigbee switches connected through Zigbee2MQTT.
     Each button (Left, Center, Right) can trigger a different action depending on its state (on/off/unknown).
-    Select your switch device once, and then choose the specific switch entities for each button.
+    Select the switch entities from your eWeLink ZB-SW03 device and configure the actions for each state.
   domain: automation
   input:
-    switch_device:
-      name: Switch Device
-      description: Select your eWeLink ZB-SW03 3-gang switch
+    left_switch:
+      name: Left Switch
+      description: Select the left switch entity
       selector:
-        device:
-          integration: mqtt
-          manufacturer: eWeLink
-          model: "Smart light switch - 3 gang"
+        entity:
+          domain: switch
+          multiple: false
     left_button_on:
-      name: Left Button - Action if ON
+      name: Left Switch - Action if ON
       default: []
       selector:
         action: {}
     left_button_off:
-      name: Left Button - Action if OFF
+      name: Left Switch - Action if OFF
       default: []
       selector:
         action: {}
     left_button_fallback:
-      name: Left Button - Fallback Action
+      name: Left Switch - Fallback Action
       default: []
       selector:
         action: {}
 
+    center_switch:
+      name: Center Switch
+      description: Select the center switch entity
+      selector:
+        entity:
+          domain: switch
+          multiple: false
     center_button_on:
-      name: Center Button - Action if ON
+      name: Center Switch - Action if ON
       default: []
       selector:
         action: {}
     center_button_off:
-      name: Center Button - Action if OFF
+      name: Center Switch - Action if OFF
       default: []
       selector:
         action: {}
     center_button_fallback:
-      name: Center Button - Fallback Action
+      name: Center Switch - Fallback Action
       default: []
       selector:
         action: {}
 
+    right_switch:
+      name: Right Switch
+      description: Select the right switch entity
+      selector:
+        entity:
+          domain: switch
+          multiple: false
     right_button_on:
-      name: Right Button - Action if ON
+      name: Right Switch - Action if ON
       default: []
       selector:
         action: {}
     right_button_off:
-      name: Right Button - Action if OFF
+      name: Right Switch - Action if OFF
       default: []
       selector:
         action: {}
     right_button_fallback:
-      name: Right Button - Fallback Action
+      name: Right Switch - Fallback Action
       default: []
       selector:
         action: {}
 
 trigger:
-  - platform: device
-    domain: mqtt
-    device_id: !input switch_device
-    type: state
-    subtype: left_switch
+  - platform: state
+    entity_id: !input left_switch
     id: left_button
-  - platform: device
-    domain: mqtt
-    device_id: !input switch_device
-    type: state
-    subtype: center_switch
+  - platform: state
+    entity_id: !input center_switch
     id: center_button
-  - platform: device
-    domain: mqtt
-    device_id: !input switch_device
-    type: state
-    subtype: right_switch
+  - platform: state
+    entity_id: !input right_switch
     id: right_button
 
 condition: []
@@ -91,55 +95,43 @@ action:
       - conditions:
           - condition: trigger
             id: left_button
-          - condition: device
-            device_id: !input switch_device
-            domain: mqtt
-            type: is_on
-            subtype: left_switch
+          - condition: state
+            entity_id: !input left_switch
+            state: "on"
         sequence: !input left_button_on
       - conditions:
           - condition: trigger
             id: left_button
-          - condition: device
-            device_id: !input switch_device
-            domain: mqtt
-            type: is_off
-            subtype: left_switch
+          - condition: state
+            entity_id: !input left_switch
+            state: "off"
         sequence: !input left_button_off
       - conditions:
           - condition: trigger
             id: center_button
-          - condition: device
-            device_id: !input switch_device
-            domain: mqtt
-            type: is_on
-            subtype: center_switch
+          - condition: state
+            entity_id: !input center_switch
+            state: "on"
         sequence: !input center_button_on
       - conditions:
           - condition: trigger
             id: center_button
-          - condition: device
-            device_id: !input switch_device
-            domain: mqtt
-            type: is_off
-            subtype: center_switch
+          - condition: state
+            entity_id: !input center_switch
+            state: "off"
         sequence: !input center_button_off
       - conditions:
           - condition: trigger
             id: right_button
-          - condition: device
-            device_id: !input switch_device
-            domain: mqtt
-            type: is_on
-            subtype: right_switch
+          - condition: state
+            entity_id: !input right_switch
+            state: "on"
         sequence: !input right_button_on
       - conditions:
           - condition: trigger
             id: right_button
-          - condition: device
-            device_id: !input switch_device
-            domain: mqtt
-            type: is_off
-            subtype: right_switch
+          - condition: state
+            entity_id: !input right_switch
+            state: "off"
         sequence: !input right_button_off
-    default: !input button_fallback
+    default: []
