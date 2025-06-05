@@ -19,74 +19,74 @@ blueprint:
           manufacturer: Tuya
           model: "Wireless switch with 4 buttons"
     button_1_single:
-      name: Button 1 Single Press
-      description: Action to run on single press of button 1
+      name: Top Left - Single Press
+      description: Action to run on single press of top left button
       default: []
       selector:
         action: {}
     button_1_double:
-      name: Button 1 Double Press
-      description: Action to run on double press of button 1
+      name: Top Left - Double Press
+      description: Action to run on double press of top left button
       default: []
       selector:
         action: {}
     button_1_hold:
-      name: Button 1 Hold
-      description: Action to run when button 1 is held
+      name: Top Left - Hold
+      description: Action to run when top left button is held
       default: []
       selector:
         action: {}
     button_2_single:
-      name: Button 2 Single Press
-      description: Action to run on single press of button 2
+      name: Top Right - Single Press
+      description: Action to run on single press of top right button
       default: []
       selector:
         action: {}
     button_2_double:
-      name: Button 2 Double Press
-      description: Action to run on double press of button 2
+      name: Top Right - Double Press
+      description: Action to run on double press of top right button
       default: []
       selector:
         action: {}
     button_2_hold:
-      name: Button 2 Hold
-      description: Action to run when button 2 is held
+      name: Top Right - Hold
+      description: Action to run when top right button is held
       default: []
       selector:
         action: {}
     button_3_single:
-      name: Button 3 Single Press
-      description: Action to run on single press of button 3
+      name: Bottom Left - Single Press
+      description: Action to run on single press of bottom left button
       default: []
       selector:
         action: {}
     button_3_double:
-      name: Button 3 Double Press
-      description: Action to run on double press of button 3
+      name: Bottom Left - Double Press
+      description: Action to run on double press of bottom left button
       default: []
       selector:
         action: {}
     button_3_hold:
-      name: Button 3 Hold
-      description: Action to run when button 3 is held
+      name: Bottom Left - Hold
+      description: Action to run when bottom left button is held
       default: []
       selector:
         action: {}
     button_4_single:
-      name: Button 4 Single Press
-      description: Action to run on single press of button 4
+      name: Bottom Right - Single Press
+      description: Action to run on single press of bottom right button
       default: []
       selector:
         action: {}
     button_4_double:
-      name: Button 4 Double Press
-      description: Action to run on double press of button 4
+      name: Bottom Right - Double Press
+      description: Action to run on double press of bottom right button
       default: []
       selector:
         action: {}
     button_4_hold:
-      name: Button 4 Hold
-      description: Action to run when button 4 is held
+      name: Bottom Right - Hold
+      description: Action to run when bottom right button is held
       default: []
       selector:
         action: {}
