@@ -7,7 +7,7 @@ blueprint:
   input:
     button_topic:
       name: MQTT Topic
-      description: The Zigbee2MQTT topic of the button (e.g., zigbee2mqtt/bn04_under_desk)
+      description: The Zigbee2MQTT topic of the button (e.g., zigbee2mqtt/device_name)
       selector:
         text:
     single_press:
