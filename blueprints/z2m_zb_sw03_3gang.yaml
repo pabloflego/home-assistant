@@ -1,7 +1,7 @@
-# Version: 0.1
+# Version: 1.0
 # Date: 2025-06-05
 blueprint:
-  name: Z2M - ZB-SW03 3 Button Switch with State-Aware Actions (HA Entities)
+  name: ZB-SW03 3 Button Switch
   description: |
     Responds to state changes on a 3-gang Zigbee2MQTT switch (like eWeLink ZB-SW03).
     Each button can trigger a different action depending on whether its switch entity is on, off, or in an unknown state.
