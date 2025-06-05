@@ -1,5 +1,5 @@
 blueprint:
-  name: ZB-SW03 3 Button Switch with State-Aware Actions (Zigbee2MQTT)
+  name: Z2M - ZB-SW03 3 Button Switch with State-Aware Actions (Zigbee2MQTT)
   description: |
     Responds to single presses on a 3-button Zigbee wall switch (like eWeLink ZB-SW03),
     using Zigbee2MQTT MQTT events for button presses. Each button can trigger a different action depending on
