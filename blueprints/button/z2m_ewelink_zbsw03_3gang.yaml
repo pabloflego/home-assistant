@@ -1,22 +1,28 @@
-# Version: 1.1
+# Version: 1.2
 # Date: 2025-06-05
 blueprint:
-  name: Z2M - eWeLink ZB-SW03 3 Gang Switch v1.1
+  name: Z2M - eWeLink ZB-SW03 3 Gang Switch v1.2
   description: |
     Automation blueprint for eWeLink ZB-SW03 3-gang Zigbee switches connected through Zigbee2MQTT.
     Each button (Left, Center, Right) can trigger a different action depending on its state (on/off/unknown).
-    The blueprint will automatically find your eWeLink ZB-SW03 devices.
+    Select your switch device once, and then choose the specific switch entities for each button.
   domain: automation
   input:
-    left_button_entity:
-      name: Left Button Switch Entity
+    switch_device:
+      name: Switch Device
+      description: Select your eWeLink ZB-SW03 3-gang switch
       selector:
         device:
           integration: mqtt
           manufacturer: eWeLink
           model: "Smart light switch - 3 gang"
-          entity:
-            domain: switch
+    left_button_entity:
+      name: Left Button Switch Entity
+      description: Select the left button switch entity
+      selector:
+        entity:
+          device_id: !input switch_device
+          domain: switch
     left_button_on:
       name: Left Button - Action if ON
       default: []
@@ -35,13 +41,11 @@ blueprint:
 
     center_button_entity:
       name: Center Button Switch Entity
+      description: Select the center button switch entity
       selector:
-        device:
-          integration: mqtt
-          manufacturer: eWeLink
-          model: "Smart light switch - 3 gang"
-          entity:
-            domain: switch
+        entity:
+          device_id: !input switch_device
+          domain: switch
     center_button_on:
       name: Center Button - Action if ON
       default: []
@@ -60,13 +64,11 @@ blueprint:
 
     right_button_entity:
       name: Right Button Switch Entity
+      description: Select the right button switch entity
       selector:
-        device:
-          integration: mqtt
-          manufacturer: eWeLink
-          model: "Smart light switch - 3 gang"
-          entity:
-            domain: switch
+        entity:
+          device_id: !input switch_device
+          domain: switch
     right_button_on:
       name: Right Button - Action if ON
       default: []
