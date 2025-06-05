@@ -1,0 +1,169 @@
+blueprint:
+  name: ZB-SW03 3 Button Switch with State-Aware Actions (Zigbee2MQTT)
+  description: |
+    Responds to single presses on a 3-button Zigbee wall switch (like eWeLink ZB-SW03),
+    using Zigbee2MQTT MQTT events for button presses. Each button can trigger a different action depending on
+    whether its switch entity is on, off, or in an unknown state.
+  domain: automation
+  input:
+    button_1_mqtt:
+      name: Button 1 Zigbee2MQTT Device
+      description: The Zigbee2MQTT device name or topic for Button 1 (e.g., 'zb_sw03_switch')
+      selector:
+        text: {}
+    button_1_action:
+      name: Button 1 Action (MQTT payload)
+      description: The payload value for Button 1 single press (e.g., 'single', '1_single')
+      selector:
+        text: {}
+    button_1_entity:
+      name: Button 1 Entity
+      selector:
+        entity:
+          domain: switch
+    button_1_on:
+      name: Button 1 - Action if ON
+      default: []
+      selector:
+        action: {}
+    button_1_off:
+      name: Button 1 - Action if OFF
+      default: []
+      selector:
+        action: {}
+    button_1_fallback:
+      name: Button 1 - Fallback Action
+      default: []
+      selector:
+        action: {}
+
+    button_2_mqtt:
+      name: Button 2 Zigbee2MQTT Device
+      description: The Zigbee2MQTT device name or topic for Button 2
+      selector:
+        text: {}
+    button_2_action:
+      name: Button 2 Action (MQTT payload)
+      description: The payload value for Button 2 single press
+      selector:
+        text: {}
+    button_2_entity:
+      name: Button 2 Entity
+      selector:
+        entity:
+          domain: switch
+    button_2_on:
+      name: Button 2 - Action if ON
+      default: []
+      selector:
+        action: {}
+    button_2_off:
+      name: Button 2 - Action if OFF
+      default: []
+      selector:
+        action: {}
+    button_2_fallback:
+      name: Button 2 - Fallback Action
+      default: []
+      selector:
+        action: {}
+
+    button_3_mqtt:
+      name: Button 3 Zigbee2MQTT Device
+      description: The Zigbee2MQTT device name or topic for Button 3
+      selector:
+        text: {}
+    button_3_action:
+      name: Button 3 Action (MQTT payload)
+      description: The payload value for Button 3 single press
+      selector:
+        text: {}
+    button_3_entity:
+      name: Button 3 Entity
+      selector:
+        entity:
+          domain: switch
+    button_3_on:
+      name: Button 3 - Action if ON
+      default: []
+      selector:
+        action: {}
+    button_3_off:
+      name: Button 3 - Action if OFF
+      default: []
+      selector:
+        action: {}
+    button_3_fallback:
+      name: Button 3 - Fallback Action
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: mqtt
+    topic: "zigbee2mqtt/!input button_1_mqtt/action"
+    payload: !input button_1_action
+    id: button_1
+  - platform: mqtt
+    topic: "zigbee2mqtt/!input button_2_mqtt/action"
+    payload: !input button_2_action
+    id: button_2
+  - platform: mqtt
+    topic: "zigbee2mqtt/!input button_3_mqtt/action"
+    payload: !input button_3_action
+    id: button_3
+
+condition: []
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: button_1
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_1_entity
+                    state: "on"
+                sequence: !input button_1_on
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_1_entity
+                    state: "off"
+                sequence: !input button_1_off
+            default: !input button_1_fallback
+
+      - conditions:
+          - condition: trigger
+            id: button_2
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_2_entity
+                    state: "on"
+                sequence: !input button_2_on
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_2_entity
+                    state: "off"
+                sequence: !input button_2_off
+            default: !input button_2_fallback
+
+      - conditions:
+          - condition: trigger
+            id: button_3
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_3_entity
+                    state: "on"
+                sequence: !input button_3_on
+              - conditions:
+                  - condition: state
+                    entity_id: !input button_3_entity
+                    state: "off"
+                sequence: !input button_3_off
+            default: !input button_3_fallback
