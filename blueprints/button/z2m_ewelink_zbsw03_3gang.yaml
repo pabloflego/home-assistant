@@ -1,7 +1,7 @@
-# Version: 1.4
+# Version: 1.5
 # Date: 2025-06-05
 blueprint:
-  name: Z2M - eWeLink ZB-SW03 3 Gang Switch v1.4
+  name: Z2M - eWeLink ZB-SW03 3 Gang Switch v1.5
   description: |
     Automation blueprint for eWeLink ZB-SW03 3-gang Zigbee switches connected through Zigbee2MQTT.
     Each button (Left, Center, Right) can trigger a different action depending on its state (on/off/unknown).
@@ -22,9 +22,8 @@ blueprint:
       selector:
         entity:
           domain: switch
-          filter:
-            - integration: mqtt
-              device_id: !input switch_device
+          device_id: !input switch_device
+          integration: mqtt
     left_button_on:
       name: Left Button - Action if ON
       default: []
@@ -47,9 +46,8 @@ blueprint:
       selector:
         entity:
           domain: switch
-          filter:
-            - integration: mqtt
-              device_id: !input switch_device
+          device_id: !input switch_device
+          integration: mqtt
     center_button_on:
       name: Center Button - Action if ON
       default: []
@@ -72,9 +70,8 @@ blueprint:
       selector:
         entity:
           domain: switch
-          filter:
-            - integration: mqtt
-              device_id: !input switch_device
+          device_id: !input switch_device
+          integration: mqtt
     right_button_on:
       name: Right Button - Action if ON
       default: []
