@@ -1,0 +1,150 @@
+# Version: 1.1
+# Date: 2025-06-05
+blueprint:
+  name: Z2M - eWeLink ZB-SW03 3 Gang Switch v1.1
+  description: |
+    Automation blueprint for eWeLink ZB-SW03 3-gang Zigbee switches connected through Zigbee2MQTT.
+    Each button (Left, Center, Right) can trigger a different action depending on its state (on/off/unknown).
+    The blueprint will automatically find your eWeLink ZB-SW03 devices.
+  domain: automation
+  input:
+    left_button_entity:
+      name: Left Button Switch Entity
+      selector:
+        device:
+          integration: mqtt
+          manufacturer: eWeLink
+          model: "Smart light switch - 3 gang"
+          entity:
+            domain: switch
+    left_button_on:
+      name: Left Button - Action if ON
+      default: []
+      selector:
+        action: {}
+    left_button_off:
+      name: Left Button - Action if OFF
+      default: []
+      selector:
+        action: {}
+    left_button_fallback:
+      name: Left Button - Fallback Action
+      default: []
+      selector:
+        action: {}
+
+    center_button_entity:
+      name: Center Button Switch Entity
+      selector:
+        device:
+          integration: mqtt
+          manufacturer: eWeLink
+          model: "Smart light switch - 3 gang"
+          entity:
+            domain: switch
+    center_button_on:
+      name: Center Button - Action if ON
+      default: []
+      selector:
+        action: {}
+    center_button_off:
+      name: Center Button - Action if OFF
+      default: []
+      selector:
+        action: {}
+    center_button_fallback:
+      name: Center Button - Fallback Action
+      default: []
+      selector:
+        action: {}
+
+    right_button_entity:
+      name: Right Button Switch Entity
+      selector:
+        device:
+          integration: mqtt
+          manufacturer: eWeLink
+          model: "Smart light switch - 3 gang"
+          entity:
+            domain: switch
+    right_button_on:
+      name: Right Button - Action if ON
+      default: []
+      selector:
+        action: {}
+    right_button_off:
+      name: Right Button - Action if OFF
+      default: []
+      selector:
+        action: {}
+    right_button_fallback:
+      name: Right Button - Fallback Action
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: state
+    entity_id: !input left_button_entity
+    id: left_button
+  - platform: state
+    entity_id: !input center_button_entity
+    id: center_button
+  - platform: state
+    entity_id: !input right_button_entity
+    id: right_button
+
+condition: []
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: left_button
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input left_button_entity
+                    state: "on"
+                sequence: !input left_button_on
+              - conditions:
+                  - condition: state
+                    entity_id: !input left_button_entity
+                    state: "off"
+                sequence: !input left_button_off
+            default: !input left_button_fallback
+
+      - conditions:
+          - condition: trigger
+            id: center_button
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input center_button_entity
+                    state: "on"
+                sequence: !input center_button_on
+              - conditions:
+                  - condition: state
+                    entity_id: !input center_button_entity
+                    state: "off"
+                sequence: !input center_button_off
+            default: !input center_button_fallback
+
+      - conditions:
+          - condition: trigger
+            id: right_button
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: !input right_button_entity
+                    state: "on"
+                sequence: !input right_button_on
+              - conditions:
+                  - condition: state
+                    entity_id: !input right_button_entity
+                    state: "off"
+                sequence: !input right_button_off
+            default: !input right_button_fallback
