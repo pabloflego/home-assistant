@@ -1,0 +1,118 @@
+# Version: 1.0
+# Date: 2025-11-19
+# Forked from: https://gist.github.com/pavax/8d6ed250765d89cb281d4a1762b8d2e8
+blueprint:
+  name: Z2M - Aqara TRV E1 External Temperature Control v1.0
+  description: >
+    This automation allows the Aqara TRV E1 Smart Radiator Thermostat to use temperature readings from an external sensor rather than its internal sensor. Whenever the temperature sensor reports a new value, it is sent to the TRV for more accurate climate control.
+  domain: automation
+  source_url: "https://raw.githubusercontent.com/pabloflego/home-assistant/refs/heads/main/blueprints/z2m_aqara_srts-a01.yaml"
+
+  input:
+    external_temp_sensor:
+      name: External Temperature Sensor
+      description: Select the temperature sensor that will provide temperature readings to the Aqara TRV.
+      selector:
+        entity:
+          filter:
+            domain: sensor
+            device_class:
+              - temperature
+
+    aqara_trv_device:
+      name: Aqara TRV Device
+      description: Select the Aqara Smart Radiator Thermostat E1 that will receive the external temperature data.
+      selector:
+        device:
+          multiple: false
+          filter:
+            - integration: mqtt
+              manufacturer: Aqara
+              model: Smart radiator thermostat E1 (SRTS-A01)
+            - integration: mqtt
+              manufacturer: Aqara
+              model: Smart radiator thermostat E1
+            - integration: mqtt
+              manufacturer: Aqara
+              model: Aqara Smart Radiator thermostat E1 (SRTS-A01)
+            - integration: mqtt
+              manufacturer: Aqara
+              model: Aqara smart radiator thermostat E1 (SRTS-A01)
+
+    external_temperature_input_name:
+      name: TRV's Input Sensor Name
+      description: Enter a keyword or name used to identify the TRV’s number sensor entity-id, which sets the external temperature value. Defaults to 'external'.
+      selector:
+        text:
+      default: "external"
+
+mode: single
+max_exceeded: silent
+
+variables:
+  aqara_trv_device: !input aqara_trv_device
+  external_temp_sensor: !input external_temp_sensor
+  external_temperature_input_name: !input external_temperature_input_name
+
+trigger:
+  - trigger: state
+    entity_id: !input external_temp_sensor
+
+action:
+  - variables:
+      aqara_trv_device_name: "{{ device_attr(aqara_trv_device, 'name') }}"
+      aqara_trv_select_entity: >-
+        {% set device_entities = device_entities(aqara_trv_device) %}
+        {{ expand(states['select'])   
+                  | selectattr('entity_id','in', device_entities)
+                  | selectattr('attributes.options', 'contains', 'external')
+                  | map(attribute='entity_id') 
+                  | first
+        }}
+      aqara_trv_number_entity: >-
+        {% set device_entities = device_entities(aqara_trv_device) %}
+        {{ expand(states['number'])   
+                  | selectattr('entity_id','in', device_entities)
+                  | selectattr('entity_id', 'contains', external_temperature_input_name)
+                  | map(attribute='entity_id') 
+                  | first
+        }}
+
+  - if:
+      - condition: template
+        value_template: >-
+          {{ is_state(external_temp_sensor, "unavailable") or is_state(external_temp_sensor, "unknown") }}
+    then:
+      - action: select.select_option
+        target:
+          entity_id: "{{aqara_trv_select_entity}}"
+        data:
+          option: internal
+      - action: system_log.write
+        data:
+          level: error
+          message: External temperature sensor unavailable
+          logger: Aqara TRV
+      - stop: External temperature sensor unavailable
+
+  - if:
+      - condition: template
+        value_template: "{{ not is_state(aqara_trv_select_entity, 'external')}}"
+    then:
+      - action: select.select_option
+        target:
+          entity_id: "{{aqara_trv_select_entity}}"
+        data:
+          option: external
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 10
+          milliseconds: 0
+
+  - action: number.set_value
+    data:
+      value: >-
+        {{ (states(external_temp_sensor)|float(0)|round(1)) }}
+    target:
+      entity_id: "{{aqara_trv_number_entity}}"
